@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block currpage %}Dashboard{% endblock currpage %}
+{% block dashboard %}active disabled{% endblock dashboard %}
+{% block body %}
+<!-- Page header with profile picture and user details-->
+<header class="py-5 bg-light border-bottom mb-4">
+    <div class="container">
+        <div class="row">
+            <div class="clearfix">
+                {% set fname="user_uploads/profile/"+user.img_url %}
+                <img src="{{url_for('static', filename=fname)}}" height=200 width=200
+                    class="mx-auto d-block me-md-3 ms float-md-start img-fluid img-thumbnail rounded"
+                    alt="profile picture">
+                <h1 class="fw-bolder mb-3">{{user.name}}</h1>
+                <p class="lead mb-3 overflow-auto">{{user.about_me}}</p>
+                <p>{{current_user.email}}</p>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- Page content-->
+<div class="container">
+    <div class="row">
+        <!-- alerts -->
+        {% with messages=get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+        {% for category,message in messages %}
+        <div class="alert alert-{{category}} alert-dismissible fade show" role="alert">
+            {{message}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+        <!-- Blog entries-->
+        <div class="col-lg-8">
+            {% if current_user.is_authenticated and current_user.id==user.id %}
+            <!-- New post -->
+            <div class="d-grid col-8 mx-auto mb-5">
+                <a id="addpost" href="/post/edit/0" class="btn-block btn btn-outline-dark btn-lg">Add new Post</a>
+            </div>
+            {% endif %}
+            <h1 class="h2 mb-3">Posts</h1>
+            {% if posts %}
+            {% for post in posts %}
+            <!-- blog post -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="small text-muted mx-1">Posted on {{post.date}}</div>
+                    <div class="small text-muted d-flex"><span class="material-icons mx-1">visibility</span> {{post.views}} view(s)</div>
+                    <h3 class="card-title">{{post.title}}</h2>
+                        <p class="card-text postContent">{{post.content[0:150]}}...</p>
+                        <a class="btn btn-primary btn-sm" href="/post/{{post.slug}}">Read more →</a>
+                        {% if current_user.is_authenticated and user.id==current_user.id %}
+                        <a class="float-right btn btn-secondary btn-sm" href="/post/edit/{{post.id}}">Edit Post</a>
+                        <form action="/post/delete/{{post.id}}" method="POST" class="d-inline">
+                            <button class="float-right btn btn-danger btn-sm" type="submit">Delete Post</button>
+                        </form>
+                        {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="alert alert-warning mx-2" role="alert">
+                No posts found.
+            </div>
+            {% endif %}
+            {% if last>1 %}
+            <!-- Pagination-->
+            <nav aria-label="Pagination">
+                <hr class="my-0" />
+                <ul class="pagination justify-content-center my-4">
+                    {% if prev=="#" %}
+                    <li class="page-item disabled"><a class="page-link" href="{{prev}}" tabindex="-1"
+                            aria-disabled="true">Newer</a></li>
+                    {% else %}
+                    <li class="page-item"><a class="page-link" href="{{prev}}">Newer</a></li>
+                    {% endif %}
+                    {% for number in range(1,last+1) %}
+                    {% set page="/profile/"~user.slug + "?page="~number %}
+                    {% if number==curr %}
+                    <li class="page-item active" aria-current="page"><span class="page-link">{{number}}</span></li>
+                    {% else %}
+                    <li class="page-item"><a class="page-link" href="{{page}}">{{number}}</a></li>
+                    {% endif %}
+                    {% endfor %}
+                    <!-- <li class="page-item disabled"><a class="page-link" href="#!">...</a></li> -->
+                    {% if next=="#" %}
+                    <li class="page-item disabled"><a class="page-link" href="{{next}}" tabindex="-1"
+                            aria-disabled="true">Older</a></li>
+                    {% else %}
+                    <li class="page-item"><a class="page-link" href="{{next}}">Older</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+        {{ super() }}
+    </div>
+</div>
+
+{% endblock body %}

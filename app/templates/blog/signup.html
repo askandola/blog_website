@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block currpage %}Register{% endblock currpage %}
+{% block body %}
+<div class="container my-5">
+    <div class="row">
+        <form class="col-lg-4 offset-lg-4 col-md-6 offset=md-3" action="/auth/register" method="POST">
+            <div class="d-flex flex-column align-items-center">
+                <img class="mb-4" src="{{url_for('static',filename='img/logo.jpeg')}}" alt="" width="100" height="100">
+                <h1 class="mb-3 fw-normal text-center">Create Account</h1>
+            </div>
+            {% with messages=get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category,message in messages %}
+            <div class="alert alert-{{category}}" role="alert">{{message}}</div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+            <div class="mb-3">Existing User? <a href="/auth/login">Login here</a></div>
+            <div class="mb-3">
+                <label for="inputEmail1" class="form-label">Email address</label>
+                <input type="email" name="email" class="form-control" id="inputEmail1" required aria-describedby="emailHelpBlock">
+                <div id="emailHelpBlock" class="form-text">
+                    Required, but never shown
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="inputName1" class="form-label">Name</label>
+                <input type="text" name="name" class="form-control" id="inputName1" required>
+            </div>
+            <div class="mb-3">
+                <label for="inputPassword1" class="form-label">Password</label>
+                <input type="password" name="pw" class="form-control" id="inputPassword1" aria-describedby="passwordHelpBlock" autocomplete required>
+                <div id="passwordHelpBlock" class="form-text">
+                    Your password must be 8-30 characters long and must not contain spaces or emoji.
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="reInputPassword1" class="form-label">Re-enter Password</label>
+                <input name="pwr" type="password" class="form-control" id="reInputPassword1" autocomplete required>
+            </div>
+            <button type="submit" class="btn btn-primary">Create Account</button>
+            <a href="/" class="btn btn-outline-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock body %}

@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block currpage %}'{{keyword}}' - Search results{% endblock currpage %}
+
+{% block body %}
+<!-- Page header with search title -->
+<header class="py-5 bg-light border-bottom mb-4">
+    <div class="container">
+        <div class="text-center my-5">
+            <h1 class="fw-bolder">Search results for '{{keyword}}'</h1>
+            <p class="lead mb-0">{{total_results}} result(s).</p>
+        </div>
+    </div>
+</header>
+<!-- Page content-->
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8">
+            <!-- Search Results -->
+            {% if total_results == 0 %}
+            <div class="alert alert-warning" role="alert">
+                No search results for '{{keyword}}''.
+            </div>
+            {% else %}
+            {% for post in results %}
+            <!-- blog post -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="small text-muted mx-1">Posted on {{post.date}} by <a
+                            href="/profile/{{post.author.slug}}"> {{post.author.name}} </a></div>
+                    <div class="small text-muted d-flex"><span class="material-icons mx-1">visibility</span> {{post.views}} view(s)</div>
+                    <h3 class="card-title">{{post.title}}</h2>
+                        <p class="card-text postContent">{{post.content[0:150]}}...</p>
+                        <a class="btn btn-primary btn-sm" href="/post/{{post.slug}}">Read more →</a>
+                </div>
+            </div>
+            {% endfor %}
+            {% endif %}   
+            {% if last>1 %}
+            <!-- Pagination-->
+            <nav aria-label="Pagination">
+                <hr class="my-0" />
+                <ul class="pagination justify-content-center my-4">
+                    {% if prev=="#" %}
+                    <li class="page-item disabled"><a class="page-link" href="{{prev}}" tabindex="-1"
+                            aria-disabled="true">Newer</a></li>
+                    {% else %}
+                    <li class="page-item"><a class="page-link" href="{{prev}}">Newer</a></li>
+                    {% endif %}
+                    {% for number in range(1,last+1) %}
+                    {% set page="/search?q="+keyword+"&page="~number %}
+                    {% if number==curr %}
+                    <li class="page-item active" aria-current="page"><span class="page-link">{{number}}</span></li>
+                    {% else %}
+                    <li class="page-item"><a class="page-link" href="{{page}}">{{number}}</a></li>
+                    {% endif %}
+                    {% endfor %}
+                    <!-- <li class="page-item disabled"><a class="page-link" href="#!">...</a></li> -->
+                    {% if next=="#" %}
+                    <li class="page-item disabled"><a class="page-link" href="{{next}}" tabindex="-1"
+                            aria-disabled="true">Older</a></li>
+                    {% else %}
+                    <li class="page-item"><a class="page-link" href="{{next}}">Older</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+        {{ super() }}
+    </div>
+</div>
+{% endblock body %}

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block currpage %}Edit Profile{% endblock currpage %}
+
+{% block body %}
+<div class="container my-5">
+    <div class="row">
+        <form class="col-lg-10" action="/auth/edit" method="POST" enctype="multipart/form-data">
+            <h1 class="h1 mb-3">Edit Profile</h1>
+            {% with messages=get_flashed_messages(with_categories=True) %}
+            {% if messages %}
+            {% for category,message in messages %}
+            <div class="alert alert-{{category}}" role="alert">
+                {{message}}
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+            <div class="form-group mb-3">
+                <label for="imageInput">Profile picture</label>
+                <div id="prevImage">
+                    {% if current_user.img_url!="avatar.png" %}
+                    {% set fname="user_uploads/profile/"+current_user.img_url %}
+                    <img src="{{url_for('static', filename=fname)}}" height=200 width=200 class="mx-auto d-block me-md-3 ms float-md-start img-fluid img-thumbnail rounded" alt="profile picture">
+                    {% endif %}
+                </div>
+                <input name="image" type="file" id="imageInput" class="form-control" onchange="document.getElementById('prevImage').style.display='none';">
+            </div>
+            <div class="form-group mb-3">
+                <label for="name">Name</label>
+                <input type="text" name="name" id="name" class="form-control" value="{{current_user.name}}" required>
+            </div>
+            <div class="form-group mb-3">
+                <label for="inputSlug">Slug</label>
+                <input type="text" name="slug" class="form-control" id="inputSlug" value="{{current_user.slug}}" required>
+            </div>
+            <div class="form-group mb-3">
+                <label for="about-me">About Me</label>
+                <input type="text" name="about_me" id="about-me" class="form-control" value="{{current_user.about_me}}">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <a type="button" href="/profile/{{current_user.slug}}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock body %}

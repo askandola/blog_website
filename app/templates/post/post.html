@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block currpage %}{{post.title}}{% endblock currpage %}
+{% block body %}
+<!-- Page content-->
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-lg-8">
+            <!-- Post content-->
+            <article>
+                <!-- Post header-->
+                <header class="mb-4">
+                    <!-- Post title-->
+                    <h1 class="fw-bolder mb-1">{{post.title}}</h1>
+                    <!-- Post meta content-->
+                    <div class="text-muted fst-italic mb-1">Posted by <a href="{{post.author.slug}}">
+                            {{post.author.name}} </a> on {{post.date}} </div>
+                    <div class="text-muted mb-2">{{post.views}} views</div>
+                    <!-- Post categories-->
+                    {% for category in post.categories %}
+                    <a class="badge bg-secondary text-decoration-none link-light"
+                        href="/category/{{category.slug}}">{{category.name}}</a>
+                    {% endfor %}
+                </header>
+                <!-- Post content-->
+                <section class="postContent" class="mb-5">{{post.content}}</section>
+            </article>
+            <p></p>
+            <hr>
+            <!-- Comments section-->
+            <section class="mb-5 w-100">
+                <h1 class="h2">Comments</h1>
+                <div class="card bg-light">
+                    <div class="card-body">
+                        {% if current_user.is_authenticated %}
+                        <!-- Comment form-->
+                        <form class="mb-4" action="/post/{{post.slug}}" method="POST">
+                            <textarea name="content" class="form-control" rows="3"
+                                placeholder="Join the discussion and leave a comment!"></textarea>
+                            <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                        </form>
+                        {% else %}
+                        <p class="mb-4"><a href="/auth/login"> Login </a>/<a href="/auth/register"> Sign up </a> to comment.</p>
+                        {% endif %}
+                        {% if comments|length == 0 %}
+                        No comments yet.
+                        {% else %}
+                        <!-- Comment with nested comments-->
+                        {% for comment in comments recursive %}
+                        <div class="d-flex mb-4">
+                            <!-- Parent comment-->
+                            {% set fname="user_uploads/profile/"+comment.author.img_url %}
+                            <div class="flex-shrink-0"><a href="/profile/{{comment.author.slug}}"><img
+                                        class="rounded-circle" src="{{url_for('static', filename=fname)}}" height="50"
+                                        width="50" alt="Profile picture" /></a></div>
+                            <div class="ms-3 w-100">
+                                <div class="fw-bold"><a
+                                        href="/profile/{{comment.author.slug}}">{{comment.author.name}}</a></div>
+                                <p class="mb-0">{{comment.content}}</p>
+                                {% if current_user.is_authenticated %}
+                                <button class="btn btn-link link-dark btn-sm mb-2" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#replyComment{{comment.id}}" aria-expanded="false"
+                                    aria-controls="replyComment{{comment.id}}">Reply</button>
+                                {% if comment.author.id==current_user.id %}
+                                <form class="d-inline" action="/post/{{post.slug}}?delete={{comment.id}}" method="POST">
+                                    <button type="submit" class="btn btn-link link-danger btn-sm mb-2">Delete</button>
+                                </form>
+                                {% endif %}
+                                <!-- Comment reply form-->
+                                <form class="collapse mb-3" id="replyComment{{comment.id}}" class="mb-4"
+                                    action="/post/{{post.slug}}?replyto={{comment.id}}" method="POST">
+                                    <textarea name="content" class="form-control" rows="2"></textarea>
+                                    <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                                </form>
+                                {% else %}
+                                <div class="mb-3"></div>
+                                {% endif %}
+                                <!-- Child comments -->
+                                {% if comment.replies %}
+                                {{loop(comment.replies)}}
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+            </section>
+        </div>
+        {{ super() }}
+    </div>
+</div>
+{% endblock body %}
