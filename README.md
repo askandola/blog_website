@@ -3,6 +3,8 @@
 
 Blog website is a blogging website built using flask and bootstrap. It allows users to Register / Sign-In and create their posts, comment on others posts, reply to the comments.
 
+Deployed on Heroku at https://blog-askandola.herokuapp.com/
+
 ## Tech Stack
 
 **Client:** HTML, CSS, JavaScript, Bootstrap
