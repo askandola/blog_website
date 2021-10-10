@@ -1,8 +1,8 @@
 {
     "params":
     {
-        "blog_name":"Clean Blog",
+        "blog_name":"Blog Website",
         "blog_subtitle":"Lorem ipsum dolor sit amet",
-        "posts_per_page":"15"
+        "posts_per_page":"7"
     }
 }

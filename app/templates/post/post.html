@@ -12,7 +12,7 @@
                     <!-- Post title-->
                     <h1 class="fw-bolder mb-1">{{post.title}}</h1>
                     <!-- Post meta content-->
-                    <div class="text-muted fst-italic mb-1">Posted by <a href="{{post.author.slug}}">
+                    <div class="text-muted fst-italic mb-1">Posted by <a href="/profile/{{post.author.slug}}">
                             {{post.author.name}} </a> on {{post.date}} </div>
                     <div class="text-muted mb-2">{{post.views}} views</div>
                     <!-- Post categories-->
@@ -39,7 +39,7 @@
                             <button type="submit" class="btn btn-primary btn-sm">Submit</button>
                         </form>
                         {% else %}
-                        <p class="mb-4"><a href="/auth/login"> Login </a>/<a href="/auth/register"> Sign up </a> to comment.</p>
+                        <p class="mb-4"><a href="/auth/login">Login</a> / <a href="/auth/register">Sign up</a> to comment.</p>
                         {% endif %}
                         {% if comments|length == 0 %}
                         No comments yet.

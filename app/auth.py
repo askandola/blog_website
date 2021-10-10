@@ -87,7 +87,7 @@ def edit() :
             user.img_url = filename
         db.session.commit()
         return redirect(f"/profile/{current_user.slug}")
-    return render_template("profile_edit.html", params=params)
+    return render_template("edit.html", params=params)
 
 @auth.route("/change-email", methods=['GET', 'POST'])
 @login_required
@@ -103,7 +103,7 @@ def change_email() :
             return redirect(f"/profile/{current_user.slug}")
         flash("wrong password", "danger")
         return redirect("/auth/change-email")
-    return render_template("profile_change_email.html", params=params)
+    return render_template("change_email.html", params=params)
 
 @auth.route("/change-password", methods=['GET', 'POST'])
 @login_required
@@ -126,7 +126,7 @@ def change_password() :
         db.session.commit()
         flash("Password changed successfully", "success")
         return redirect(f"/profile/{current_user.slug}")
-    return render_template("profile_change_password.html", params=params)
+    return render_template("change_password.html", params=params)
 
 @auth.route("/delete", methods=['GET', 'POST'])
 @login_required
@@ -141,4 +141,4 @@ def delete() :
             return redirect("/")
         flash("Wrong password", "danger")
         return redirect("/auth/delete")
-    return render_template("profile_delete.html", params=params)
+    return render_template("delete.html", params=params)

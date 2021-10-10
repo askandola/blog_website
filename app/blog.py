@@ -45,7 +45,7 @@ def user_route(slug) :
         prev = "#"
         next = f"/profile/{slug}?page="+str(page+1)
     elif page==last :
-        prev = f"/profile.{slug}?page="+str(page-1)
+        prev = f"/profile/{slug}?page="+str(page-1)
         next = "#"
     else :
         prev = f"/profile/{slug}?page="+str(page-1)

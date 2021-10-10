@@ -104,7 +104,7 @@ def imageuploader():
     if file:
         filename = secure_filename(file.filename)
         filename = filename.lower()
-        img_fullpath = os.path.join("./static/user_uploads/post", filename)
+        img_fullpath = os.path.join("app/static/user_uploads/post/", filename)
         file.save(img_fullpath)
         return jsonify({'location' : filename})
 
