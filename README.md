@@ -44,5 +44,5 @@ Install dependencies
 Start the server
 
 ```bash
-  python ./app.py
+  python ./run.py
 ```
